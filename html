@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShipSmart - Your Trusted Global Shipping Partner</title>
+    <style>
+        /* Creative and attractive design */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0f7fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #00796b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #004d40;
+        }
+        .button {
+            background-color: #00796b;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .button:hover {
+            background-color: #004d40;
+        }
+        input, select {
+            padding: 10px;
+            margin-top: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        .tracking-info, .generate-info {
+            margin-top: 30px;
+        }
+        .tracking-section {
+            margin-top: 20px;
+            display: none;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #00796b;
+            color: white;
+            border-top: 5px solid #004d40;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ShipSmart</h1>
+        <h2>Your Trusted Global Shipping Partner</h2>
+    </div>
+    <div class="container">
+        <p>Welcome to ShipSmart, the number one trusted shipping company in America, located in the heart of Washington, D.C. We specialize in shipping products from all over the world, ensuring that your packages arrive safely and on time. Our commitment to excellence has made us the top choice for customers looking to ship their goods globally.</p>
+        
+        <div class="generate-info">
+            <h3>Generate Tracking Number</h3>
+            <label for="origin">Enter Origin Address:</label>
+            <input type="text" id="origin" placeholder="e.g., 123 Main St, New York, NY">
+
+            <label for="destination">Enter Destination Address:</label>
+            <input type="text" id="destination" placeholder="e.g., 456 Elm St, London, UK">
+            
+            <label for="privacy">Privacy:</label>
+            <select id="privacy">
+                <option value="public">Public</option>
+                <option value="private">Private</option>
+            </select>
+            
+            <button class="button" onclick="generateTracking()">Generate Tracking Number</button>
+            <div id="trackingNumber"></div>
+        </div>
+
+        <div class="tracking-info">
+            <h3>Track Your Package</h3>
+            <button class="button" onclick="toggleTrackingSection()">Track Package</button>
+            <div class="tracking-section" id="trackingSection">
+                <input type="text" id="trackInput" placeholder="Enter Tracking Number">
+                
+                <label for="trackPrivacy">Privacy:</label>
+                <select id="trackPrivacy">
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+                </select>
+                
+                <button class="button" onclick="trackPackage()">Submit</button>
+                <div id="trackingDetails"></div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 ShipSmart - Delivering Excellence Worldwide</p>
+    </div>
+
+    <script>
+        const shippingData = {};
+
+        function generateTracking() {
+            const trackingNumber = 'TRK' + Math.floor(Math.random() * 1000000);
+            const origin = document.getElementById('origin').value;
+            const destination = document.getElementById('destination').value;
+            const privacy = document.getElementById('privacy').value;
+
+            if (!origin || !destination) {
+                document.getElementById('trackingNumber').innerText = 'Please enter both origin and destination addresses.';
+                return;
+            }
+
+            shippingData[trackingNumber] = { origin, destination, status: 'In Transit', privacy };
+
+            document.getElementById('trackingNumber').innerHTML = `
+                <p><strong>Tracking Number:</strong> ${trackingNumber}</p>
+                <p><strong>Origin:</strong> ${origin}</p>
+                <p><strong>Destination:</strong> ${destination}</p>
+                <p><strong>Privacy:</strong> ${privacy}</p>
+            `;
+        }
+
+        function toggleTrackingSection() {
+            const trackingSection = document.getElementById('trackingSection');
+            trackingSection.style.display = trackingSection.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function trackPackage() {
+            const trackingNumber = document.getElementById('trackInput').value;
+            const enteredPrivacy = document.getElementById('trackPrivacy').value;
+            const details = shippingData[trackingNumber];
+
+            if (details) {
+                if (details.privacy === enteredPrivacy) {
+                    document.getElementById('trackingDetails').innerHTML = `
+                        <p><strong>Tracking Number:</strong> ${trackingNumber}</p>
+                        <p><strong>Origin:</strong> ${details.origin}</p>
+                        <p><strong>Destination:</strong> ${details.destination}</p>
+                        <p><strong>Status:</strong> ${details.status}</p>
+                    `;
+                } else {
+                    document.getElementById('trackingDetails').innerText = 'Privacy setting does not match.';
+                }
+            } else {
+                document.getElementById('trackingDetails').innerText = 'Tracking number not found.';
+            }
+        }
+    </script>
+</body>
+</html>
